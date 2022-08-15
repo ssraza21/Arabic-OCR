@@ -1,0 +1,12 @@
+reportlab
+numpy
+docx2pdf
+pypdfium2==1.0.0
+pdf2image
+opencv-python
+arabic_reshaper
+pytesseract
+python-docx
+python-bidi
+PyPDF2==2.10.0
+Pillow
