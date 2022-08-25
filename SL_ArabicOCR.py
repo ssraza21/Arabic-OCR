@@ -45,17 +45,21 @@ def show_pdf(file_path):
 if __name__ == '__main__':
     st.markdown("# Arabic Image-to-Text Converter")
     st.markdown(
-        " ##### This application is used to convert a PDF or image that has Arabic text (scanned or otherwise) and convert it into text that can be searched, copied, analyzed, etc. \n ##### The output can be downloaded as a PDF or a Word Doc file. ")
+        " #### This application is used to convert a PDF or image that has Arabic text (scanned or otherwise) and convert it into text that can be searched, copied, analyzed, etc. The output can be downloaded as a PDF or a Word Doc file. \n #### It is IMPORTANT to input how many pages to convert, otherwise it will default to 1.")
     st.markdown(
         "## **Two Options** \n #### 1) Input a .PDF file (recommended)\n #### 2) Input an Image file")
     st.markdown(
         "## Notes: \n - The output will be better if a PDF file is given \n - Once you upload the file, a \"Running\" sign with show at the top right) \n - Once it has completed running, two buttons will appear to download the respective files")
     # Import a PDF in and convert it to images. Save all of the images in a list
+    st.markdown(
+        "### How many pages would you like to convert?")
+    t = st.text_input("Insert amount of pages")
     c1, c2 = st.columns(2)
     with c1:
         pdf_input = st.file_uploader("Input a .PDF")
     with c2:
         img_input = st.file_uploader("Input an Image")
+
     p2 = pdf_input
     images = []  # This will save all of the images that were converted
     f_name = ""
@@ -64,9 +68,11 @@ if __name__ == '__main__':
 
         if pdf_input is not None:
             f_name = "OCR_" + pdf_input.name[:-4]
-
-            pdff = PyPDF2.PdfFileReader(open(pdf_input.name, "rb"))
-            num_of_pages = pdff.getNumPages()
+            #pdff = PyPDF2.PdfFileReader(open(pdf_input.read(), "rb"))
+            if t != "":
+                num_of_pages = int(t)
+            else:
+                num_of_pages = 1
             print(num_of_pages)
             with pdfium.PdfContext(pdf_input) as pdf:
                 for page in range(num_of_pages):
