@@ -188,4 +188,4 @@ if __name__ == '__main__':
     st.markdown("")
     st.markdown("")
     st.markdown(
-        "[Coded up by Syed Raza!](https://sraza1999.github.io/index.html)")
+        "[Coded up by Syed Raza!](https://ssraza21.github.io/index.html)")
