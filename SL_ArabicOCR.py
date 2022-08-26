@@ -35,6 +35,24 @@ print("hello to streamlit")
 pdfmetrics.registerFont(TTFont('Arabic_naskh', 'NotoNaskhArabic-Regular.ttf'))
 
 
+@st.cache(allow_output_mutation=True)
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+
+@st.cache(allow_output_mutation=True)
+def get_img_with_href(local_img_path, target_url):
+    img_format = os.path.splitext(local_img_path)[-1].replace('.', '')
+    bin_str = get_base64_of_bin_file(local_img_path)
+    html_code = f'''
+        <a href="{target_url}">
+            <img src="data:image/{img_format};base64,{bin_str}" />
+        </a>'''
+    return html_code
+
+
 def show_pdf(file_path):
     with open(file_path, "rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode('utf-8')
@@ -47,7 +65,7 @@ if __name__ == '__main__':
     st.markdown(
         " #### This application is used to convert a PDF or image that has Arabic text (scanned or otherwise) and convert it into text that can be searched, copied, analyzed, etc. The output can be downloaded as a PDF or a Word Doc file. \n #### It is IMPORTANT to input how many pages to convert, otherwise it will default to 1.")
     st.markdown(
-        "## **Two Options** \n #### 1) Input a .PDF file (recommended)\n #### 2) Input an Image file")
+        "## **Two Options** \n ##### 1) Input a .PDF file (recommended)\n ##### 2) Input an Image file")
     st.markdown(
         "## Notes: \n - The output will be better if a PDF file is given \n - Once you upload the file, a \"Running\" sign with show at the top right) \n - Once it has completed running, two buttons will appear to download the respective files")
     # Import a PDF in and convert it to images. Save all of the images in a list
@@ -188,4 +206,24 @@ if __name__ == '__main__':
     st.markdown("")
     st.markdown("")
     st.markdown(
-        "[Coded up by Syed Raza!](https://ssraza21.github.io/index.html)")
+        "##### Developed by [Syed (Shahrukh) Raza](https://ssraza21.github.io/index.html). Keep me in your Prayers InshaAllah. \n \n #### Connect with me on:")
+
+    twitter_t = get_img_with_href(
+        'Thumbnails/twitter.png', 'https://twitter.com/ssraza21')
+    medium_t = get_img_with_href(
+        'Thumbnails/medium.png', 'https://medium.com/@ssraza21')
+    linkedin_t = get_img_with_href(
+        'Thumbnails/linkedin.png', 'https://www.linkedin.com/in/ssraza21')
+    github_t = get_img_with_href(
+        'Thumbnails/github.png', 'https://github.com/ssraza21')
+
+    t_1, t_2, t_3, t_4, t_5 = st.columns([1, 1, 1, 1, 4], gap="small")
+
+    with t_1:
+        st.markdown(twitter_t, unsafe_allow_html=True)
+    with t_2:
+        st.markdown(medium_t, unsafe_allow_html=True)
+    with t_3:
+        st.markdown(linkedin_t, unsafe_allow_html=True)
+    with t_4:
+        st.markdown(github_t, unsafe_allow_html=True)
