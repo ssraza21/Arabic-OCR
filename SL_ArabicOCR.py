@@ -33,6 +33,7 @@ from PIL import Image, ImageOps
 print("hello to streamlit")
 # alias python=/usr/local/bin/python3
 pdfmetrics.registerFont(TTFont('Arabic_naskh', 'NotoNaskhArabic-Regular.ttf'))
+pdfmetrics.registerFont(TTFont('Urdu_naskh', 'NotoNastaliqUrdu-Regular.ttf'))
 
 
 @st.cache(allow_output_mutation=True)
@@ -61,20 +62,29 @@ def show_pdf(file_path):
 
 
 if __name__ == '__main__':
-    st.markdown("# Arabic Image-to-Text Converter")
+    st.markdown("# Image-to-Text Converter For Arabic and Urdu documents")
     st.markdown(
-        " #### This application is used to convert a PDF or image that has Arabic text (scanned or otherwise) and convert it into text that can be searched, copied, analyzed, etc. The output can be downloaded as a PDF or a Word Doc file. \n #### It is IMPORTANT to input how many pages to convert, otherwise it will default to 1.")
+        "This application is used to convert a PDF or image that has **Arabic or Urdu** text (scanned or otherwise) and convert it into text that can be searched, copied, analyzed, etc. The output can be downloaded as a PDF or a Word Doc file for Arabic input. **Due to the weak results for Urdu, it can only be downloaded in Word doc format. You are free to make edits and export to PDF.** \n #### Please input how many pages to convert, otherwise it will default to 1. If you're unsure, click [here](https://i.imgur.com/nmTKMTc.png) for an explanation.")
     st.markdown(
-        "## **Two Options** \n ##### 1) Input a .PDF file (recommended)\n ##### 2) Input an Image file")
+        "## **Two Options** \n 1) Input a .PDF file (recommended)\n 2) Input an Image file")
     st.markdown(
-        "## Notes: \n - The output will be better if a PDF file is given \n - Once you upload the file, a \"Running\" sign with show at the top right) \n - Once it has completed running, two buttons will appear to download the respective files")
+        "## Notes: \n - The output for Urdu is not very good as of right now \n - Once you upload the file, a \"Running\" sign with show at the top right \n - Once it has completed running, two buttons will appear to download the respective files")
     # Import a PDF in and convert it to images. Save all of the images in a list
+    st.markdown("")
+    st.markdown("____________________________________")
     st.markdown(
-        "### How many pages would you like to convert?")
-    t = st.text_input("Insert amount of pages")
+        "### 1) Select language")
+    language = st.selectbox("Language to convert", ["Arabic", "Urdu"])
+    curr_lang = "ara" if language == "Arabic" else "urd"
+    print(curr_lang)
+    st.markdown(
+        "### 2) Input number of pages")
+    t = st.text_input("Insert only the number of pages and press enter")
+    st.markdown(
+        "### 3) Upload which file you'd like to convert!")
     c1, c2 = st.columns(2)
     with c1:
-        pdf_input = st.file_uploader("Input a .PDF")
+        pdf_input = st.file_uploader("Input a PDF")
     with c2:
         img_input = st.file_uploader("Input an Image")
 
@@ -112,7 +122,7 @@ if __name__ == '__main__':
 
         # For each image/page, get the text version
         for image in images:
-            t = pytesseract.image_to_string(image, lang='ara')
+            t = pytesseract.image_to_string(image, lang=curr_lang)
             pages.append(t)
 
         # Save each string aka page as a page in a PDF
@@ -125,7 +135,7 @@ if __name__ == '__main__':
         styleH_3 = styles['Heading3']
 
         a_s_naskh = ParagraphStyle(
-            'naskh', fontName='Arabic_naskh', wordWrap='RTL', alignment=2, fontSize=17)
+            'naskh', fontName=language+'_naskh', wordWrap='RTL', alignment=2, fontSize=17)
         style_pNum = ParagraphStyle('page_num', alignment=1, fontSize=16)
 
         # The list that will contain everything that will be ouputted in sequential order
@@ -158,7 +168,8 @@ if __name__ == '__main__':
             pdf_page = pdf_page + 1
 
         # DONE WITH EVERY PAGE CODE
-
+        story.append(
+            Paragraph("Converted to digital text by Shahrukh Raza. Tool Used: https://ssraza21-arabic-ocr-sl-arabicocr-l7mosu.streamlitapp.com/ ", styleH_3))
         doc = SimpleDocTemplate(f_name+".pdf", pagesize=letter)
         doc.build(story)  # Create it with all of the information inside
         print('PDF saved Alhamdulillah')
@@ -169,7 +180,7 @@ if __name__ == '__main__':
         doc_font = doc_style.font
         doc_font.size = Pt(15)
         p_num = 1
-        document.add_heading('Arabic OCR Reader Word Output', 0)
+        document.add_heading('OCR Reader Word Output', 0)
 
         for page in pages:
             filtered = filter(lambda x: not re.match(
@@ -196,15 +207,16 @@ if __name__ == '__main__':
         with col1:
             pass
         with col2:
-            st.download_button(label="Download the .PDF file", data=PDFbyte,
-                               file_name="test.pdf", mime='application/octet-stream')
+            if curr_lang == 'ara':
+                st.download_button(label="Download the .PDF file", data=PDFbyte,
+                                   file_name=f_name+".pdf", mime='application/octet-stream')
             st.download_button("Download the .Docx file", data=wordByte,
                                file_name=f_name+".docx", mime='application/octet-stream')
         with col3:
             pass
         # show_pdf(f_name+".pdf")
     st.markdown("")
-    st.markdown("")
+    st.markdown("____________________________________")
     st.markdown(
         "##### Developed by [Syed (Shahrukh) Raza](https://ssraza21.github.io/index.html). Keep me in your Prayers InshaAllah. \n \n #### Connect with me on:")
 
