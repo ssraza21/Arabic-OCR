@@ -30,7 +30,7 @@ from base64 import b64encode
 import PyPDF2
 from PIL import Image, ImageOps
 
-print("hello to streamlit")
+#print("hello to streamlit")
 # alias python=/usr/local/bin/python3
 pdfmetrics.registerFont(TTFont('Arabic_naskh', 'NotoNaskhArabic-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Urdu_naskh', 'NotoNastaliqUrdu-Regular.ttf'))
