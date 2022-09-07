@@ -26,7 +26,7 @@ import pytesseract
 import streamlit as st
 import base64
 from base64 import b64encode
-#mport PyPDF2
+#import PyPDF2
 from PIL import Image, ImageOps
 
 #print("hello to streamlit")
