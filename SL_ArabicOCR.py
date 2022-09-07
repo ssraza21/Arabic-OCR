@@ -14,7 +14,6 @@ from reportlab.lib.enums import TA_RIGHT
 import re
 import os
 import pypdfium2 as pdfium
-from pdf2image import convert_from_path
 from bidi.algorithm import get_display
 import arabic_reshaper
 from reportlab.pdfbase.ttfonts import TTFont
@@ -23,11 +22,11 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 import pytesseract
-from pdf2image import convert_from_path
+#rom pdf2image import convert_from_path
 import streamlit as st
 import base64
 from base64 import b64encode
-import PyPDF2
+#mport PyPDF2
 from PIL import Image, ImageOps
 
 #print("hello to streamlit")
@@ -102,10 +101,10 @@ if __name__ == '__main__':
             else:
                 num_of_pages = 1
             print(num_of_pages)
-            with pdfium.PdfContext(pdf_input) as pdf:
-                for page in range(num_of_pages):
-                    image = pdfium.render_page_topil(pdf, page)
-                    images.append(image)
+            with pdfium.PdfDocument(pdf_input) as pdf:
+                page_indices = list( range(num_of_pages) )
+                renderer = pdf.render_topil(page_indices=page_indices)
+                images += list(renderer)
         else:
             f_name = "OCR_" + img_input.name[:-4]
             pil_img = Image.open(img_input)
