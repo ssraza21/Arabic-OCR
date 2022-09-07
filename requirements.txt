@@ -1,7 +1,7 @@
 reportlab
 numpy
 docx2pdf
-pypdfium2==1.0.0
+pypdfium2>=2
 pdf2image
 opencv-python
 arabic_reshaper
