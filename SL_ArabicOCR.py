@@ -102,7 +102,10 @@ if __name__ == '__main__':
                 num_of_pages = 1
             print(num_of_pages)
             with pdfium.PdfDocument(pdf_input) as pdf:
-                renderer = pdf.render_topil(page_indices=list(range(num_of_pages)))
+                renderer = pdf.render_topil(
+                    page_indices = list(range(num_of_pages)),
+                    greyscale = True,
+                )
                 images += list(renderer)
         else:
             f_name = "OCR_" + img_input.name[:-4]
