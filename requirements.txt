@@ -2,11 +2,11 @@ reportlab
 numpy
 docx2pdf
 pypdfium2>=2
-pdf2image
+#pdf2image
 opencv-python
 arabic_reshaper
 pytesseract
 python-docx
 python-bidi
-PyPDF2==2.10.0
+#PyPDF2==2.10.0
 Pillow
