@@ -95,18 +95,18 @@ if __name__ == '__main__':
 
         if pdf_input is not None:
             f_name = "OCR_" + pdf_input.name[:-4]
-            #pdff = PyPDF2.PdfFileReader(open(pdf_input.read(), "rb"))
+            pdf_input.seek(0)
+            pdf = pdfium.PdfDocument(pdf_input.read())
             if t != "":
                 num_of_pages = int(t)
             else:
-                num_of_pages = 1
+                num_of_pages = len(pdf)
             print(num_of_pages)
-            with pdfium.PdfDocument(pdf_input) as pdf:
-                renderer = pdf.render_topil(
-                    page_indices = list(range(num_of_pages)),
-                    greyscale = True,
-                )
-                images += list(renderer)
+            renderer = pdf.render_topil(
+                page_indices = list(range(num_of_pages)),
+                greyscale = True,
+            )
+            images += list(renderer)
         else:
             f_name = "OCR_" + img_input.name[:-4]
             pil_img = Image.open(img_input)
