@@ -6,7 +6,6 @@ from docx2pdf import convert
 from docx.shared import Inches
 from docx import Document
 from reportlab.lib.units import inch, mm, cm, pica
-import logging
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
