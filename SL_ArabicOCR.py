@@ -30,10 +30,11 @@ from base64 import b64encode
 import PyPDF2
 from PIL import Image, ImageOps
 
-#print("hello to streamlit")
+# print("hello to streamlit")
 # alias python=/usr/local/bin/python3
 pdfmetrics.registerFont(TTFont('Arabic_naskh', 'NotoNaskhArabic-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Urdu_naskh', 'NotoNastaliqUrdu-Regular.ttf'))
+language_mapping = {"Arabic": "ara", "Urud": "urd"}
 
 
 @st.cache(allow_output_mutation=True)
@@ -75,7 +76,7 @@ if __name__ == '__main__':
     st.markdown(
         "### 1) Select language")
     language = st.selectbox("Language to convert", ["Arabic", "Urdu"])
-    curr_lang = "ara" if language == "Arabic" else "urd"
+    curr_lang = language_mapping[language]
     print(curr_lang)
     st.markdown(
         "### 2) Input number of pages")
@@ -91,12 +92,12 @@ if __name__ == '__main__':
     p2 = pdf_input
     images = []  # This will save all of the images that were converted
     f_name = ""
-    #images = convert_from_path(pdffile)
+    # images = convert_from_path(pdffile)
     if pdf_input is not None or img_input is not None:
 
         if pdf_input is not None:
             f_name = "OCR_" + pdf_input.name[:-4]
-            #pdff = PyPDF2.PdfFileReader(open(pdf_input.read(), "rb"))
+            # pdff = PyPDF2.PdfFileReader(open(pdf_input.read(), "rb"))
             if t != "":
                 num_of_pages = int(t)
             else:
