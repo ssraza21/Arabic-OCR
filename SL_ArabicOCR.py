@@ -1,37 +1,22 @@
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, PageBreak, Table, TableStyle
-import numpy as np
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx2pdf import convert
-from docx.shared import Inches
 from docx import Document
-from reportlab.lib.units import inch, mm, cm, pica
-import logging
-from io import BytesIO
-from reportlab.pdfgen import canvas
-from reportlab.lib import colors
 from reportlab.lib.enums import TA_RIGHT
 import re
 import os
 import pypdfium2 as pdfium
-from pdf2image import convert_from_path
 from bidi.algorithm import get_display
 import arabic_reshaper
 from reportlab.pdfbase.ttfonts import TTFont
-import reportlab
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 import pytesseract
-from pdf2image import convert_from_path
 import streamlit as st
 import base64
-from base64 import b64encode
-import PyPDF2
 from PIL import Image, ImageOps
 
-# print("hello to streamlit")
-# alias python=/usr/local/bin/python3
 pdfmetrics.registerFont(TTFont('Arabic_naskh', 'NotoNaskhArabic-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Urdu_naskh', 'NotoNastaliqUrdu-Regular.ttf'))
 language_mapping = {"Arabic": "ara", "Urud": "urd"}
@@ -53,13 +38,6 @@ def get_img_with_href(local_img_path, target_url):
             <img src="data:image/{img_format};base64,{bin_str}" />
         </a>'''
     return html_code
-
-
-def show_pdf(file_path):
-    with open(file_path, "rb") as f:
-        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf"></iframe>'
-    st.markdown(pdf_display, unsafe_allow_html=True)
 
 
 if __name__ == '__main__':
@@ -97,7 +75,6 @@ if __name__ == '__main__':
 
         if pdf_input is not None:
             f_name = "OCR_" + pdf_input.name[:-4]
-            # pdff = PyPDF2.PdfFileReader(open(pdf_input.read(), "rb"))
             if t != "":
                 num_of_pages = int(t)
             else:
@@ -125,9 +102,6 @@ if __name__ == '__main__':
         for image in images:
             t = pytesseract.image_to_string(image, lang=curr_lang)
             pages.append(t)
-
-        # Save each string aka page as a page in a PDF
-        # only 4 minutes for 840 page PDF !
 
         # init the style sheet from reportlab
         styles = getSampleStyleSheet()
@@ -215,7 +189,6 @@ if __name__ == '__main__':
                                file_name=f_name+".docx", mime='application/octet-stream')
         with col3:
             pass
-        # show_pdf(f_name+".pdf")
     st.markdown("")
     st.markdown("____________________________________")
     st.markdown(
