@@ -77,7 +77,6 @@ if __name__ == '__main__':
         "### 1) Select language")
     language = st.selectbox("Language to convert", ["Arabic", "Urdu"])
     curr_lang = language_mapping[language]
-    print(curr_lang)
     st.markdown(
         "### 2) Input number of pages")
     t = st.text_input("Insert only the number of pages and press enter")
