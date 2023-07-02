@@ -191,7 +191,7 @@ if __name__ == '__main__':
     st.markdown("")
     st.markdown("____________________________________")
     st.markdown(
-        "##### Developed by [Syed (Shahrukh) Raza](https://ssraza21.github.io/index.html). Keep me in your Prayers InshaAllah. \n \n #### Connect with me on:")
+        "##### Developed by [Shahrkuh Raza](https://ssraza21.github.io/index.html). Keep me in your Prayers InshaAllah. \n \n #### Connect with me on:")
 
     twitter_t = get_img_with_href(
         'Thumbnails/twitter.png', 'https://twitter.com/ssraza21')
