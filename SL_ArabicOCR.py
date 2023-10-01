@@ -19,7 +19,7 @@ from PIL import Image, ImageOps
 
 pdfmetrics.registerFont(TTFont('Arabic_naskh', 'NotoNaskhArabic-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Urdu_naskh', 'NotoNastaliqUrdu-Regular.ttf'))
-language_mapping = {"Arabic": "ara", "Urud": "urd"}
+language_mapping = {"Arabic": "ara", "Urdu": "urd"}
 
 
 @st.cache(allow_output_mutation=True)
@@ -143,7 +143,7 @@ if __name__ == '__main__':
 
         # DONE WITH EVERY PAGE CODE
         story.append(
-            Paragraph("Converted to digital text by Shahrukh Raza. Tool Used: https://ssraza21-arabic-ocr-sl-arabicocr-l7mosu.streamlitapp.com/ ", styleH_3))
+            Paragraph("Converted to digital text by Shahrukh RazaTool Used: https://ssraza21-arabic-ocr-sl-arabicocr-l7mosu.streamlitapp.com/ ", styleH_3))
         doc = SimpleDocTemplate(f_name+".pdf", pagesize=letter)
         doc.build(story)  # Create it with all of the information inside
         print('PDF saved Alhamdulillah')
