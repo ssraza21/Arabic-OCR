@@ -19,7 +19,9 @@ from PIL import Image, ImageOps
 
 pdfmetrics.registerFont(TTFont('Arabic_naskh', 'NotoNaskhArabic-Regular.ttf'))
 pdfmetrics.registerFont(TTFont('Urdu_naskh', 'NotoNastaliqUrdu-Regular.ttf'))
-language_mapping = {"Arabic": "ara", "Urdu": "urd"}
+pdfmetrics.registerFont(
+    TTFont('English_naskh', 'Roboto-Regular.ttf'))
+language_mapping = {"Arabic": "ara", "Urdu": "urd", "English": "eng"}
 
 
 @st.cache(allow_output_mutation=True)
@@ -53,7 +55,8 @@ if __name__ == '__main__':
     st.markdown("____________________________________")
     st.markdown(
         "### 1) Select language")
-    language = st.selectbox("Language to convert", ["Arabic", "Urdu"])
+    language = st.selectbox("Language to convert", [
+                            "Arabic", "Urdu", "English"])
     curr_lang = language_mapping[language]
     st.markdown(
         "### 2) Input number of pages")
@@ -110,6 +113,8 @@ if __name__ == '__main__':
 
         a_s_naskh = ParagraphStyle(
             'naskh', fontName=language+'_naskh', wordWrap='RTL', alignment=2, fontSize=17)
+        eng_naskh = ParagraphStyle(
+            'naskh', fontName=language+'_naskh', alignment=2, fontSize=17)
         style_pNum = ParagraphStyle('page_num', alignment=1, fontSize=16)
 
         # The list that will contain everything that will be ouputted in sequential order
@@ -119,31 +124,34 @@ if __name__ == '__main__':
         # RUN THROUGH EVERY PAGE CODE
         story.append(Paragraph(
             "The Quality is NOT 100%. If there is text that is small, it will not accurately portray it", styleH_1))
-        for page in pages:
-            p = "PDF page: " + str(pdf_page)
+        if curr_lang != "eng":
+            for page in pages:
+                p = "PDF page: " + str(pdf_page)
 
-            story.append(Paragraph(p, style_pNum))
-            story.append(Spacer(1, 12))
-            lines = page.split("\n")
-            # print(lines)
-            for line in lines:
-                line = os.linesep.join([s for s in line.splitlines() if s])
-
-                # Run the two functions to reshape the text so it is formatted correctly for the PDF
-                reshaped_text = arabic_reshaper.reshape(line)
-                line_text = get_display(reshaped_text)
-
-                # make a paragraph of that line with the specific font + settings
-                story.append(Paragraph(line_text, a_s_naskh))
+                story.append(Paragraph(p, style_pNum))
                 story.append(Spacer(1, 12))
+                lines = page.split("\n")
+                # print(lines)
+                for line in lines:
+                    line = os.linesep.join([s for s in line.splitlines() if s])
+                    # Run the two functions to reshape the text so it is formatted correctly for the PDF
+                    print(f"line: {line}")
+                    # make a paragraph of that line with the specific font + settings
+                    if curr_lang == 'eng':
+                        story.append(Paragraph(line, eng_naskh))
+                    else:
+                        reshaped_text = arabic_reshaper.reshape(line)
+                        line_text = get_display(reshaped_text)
+                        story.append(Paragraph(line_text, a_s_naskh))
+                    story.append(Spacer(1, 12))
 
-            # Go to the next page since we want to have it correlate to the PDF
-            # story.append(PageBreak())
-            pdf_page = pdf_page + 1
+                # Go to the next page since we want to have it correlate to the PDF
+                # story.append(PageBreak())
+                pdf_page = pdf_page + 1
 
         # DONE WITH EVERY PAGE CODE
         story.append(
-            Paragraph("Converted to digital text by Shahrukh RazaTool Used: https://ssraza21-arabic-ocr-sl-arabicocr-l7mosu.streamlitapp.com/ ", styleH_3))
+            Paragraph("Converted to digital text by Shahrukh Raza. Tool Used: https://ssraza21-arabic-ocr-sl-arabicocr-l7mosu.streamlitapp.com/ ", styleH_3))
         doc = SimpleDocTemplate(f_name+".pdf", pagesize=letter)
         doc.build(story)  # Create it with all of the information inside
         print('PDF saved Alhamdulillah')
@@ -162,11 +170,14 @@ if __name__ == '__main__':
             ppage = list(filtered)
             pp = document.add_paragraph("PDF Page: " + str(p_num) + "\n")
             for i in range(len(ppage)):
-                p_reshape = arabic_reshaper.reshape(ppage[i])
-                p = document.add_paragraph(p_reshape)
-                p.style.font.rtl = True
-                p.style.font.size = Pt(17)
-                p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+                if curr_lang == 'eng':
+                    p = document.add_paragraph(ppage[i])
+                else:
+                    p_reshape = arabic_reshaper.reshape(ppage[i])
+                    p = document.add_paragraph(p_reshape)
+                    p.style.font.rtl = True
+                    p.style.font.size = Pt(17)
+                    p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
             p_num += 1
             # document.add_page_break()
         document.save(f_name+".docx")
@@ -181,7 +192,7 @@ if __name__ == '__main__':
         with col1:
             pass
         with col2:
-            if curr_lang == 'ara':
+            if curr_lang in ['ara']:
                 st.download_button(label="Download the .PDF file", data=PDFbyte,
                                    file_name=f_name+".pdf", mime='application/octet-stream')
             st.download_button("Download the .Docx file", data=wordByte,
