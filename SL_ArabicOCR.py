@@ -41,9 +41,22 @@ def get_img_with_href(local_img_path, target_url):
 
 
 if __name__ == '__main__':
+    st.success(
+    """
+    Try [Textifyi](https://texti.fyi/) for better conversions! Now in beta and open for testing.
+    """,
+    icon="✨",
+    )
     st.markdown("# Image-to-Text Converter For Arabic and Urdu documents")
     st.markdown(
         "This application is used to convert a PDF or image that has **Arabic or Urdu** text (scanned or otherwise) and convert it into text that can be searched, copied, analyzed, etc. The output can be downloaded as a PDF or a Word Doc file for Arabic input. **Due to the weak results for Urdu, it can only be downloaded in Word doc format. You are free to make edits and export to PDF.** \n #### Please input how many pages to convert, otherwise it will default to 1. If you're unsure, click [here](https://i.imgur.com/nmTKMTc.png) for an explanation.")
+    st.info(
+    """
+    Running into an **issue** or would like a **new feature**?
+    [Let us know by opening a GitHub issue!](https://github.com/ssraza21/Arabic-OCR/issues/new)
+    """,
+    icon="❓",
+    )
     st.markdown(
         "## **Two Options** \n 1) Input a .PDF file (recommended)\n 2) Input an Image file")
     st.markdown(
