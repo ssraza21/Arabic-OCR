@@ -24,14 +24,12 @@ pdfmetrics.registerFont(
 language_mapping = {"Arabic": "ara", "Urdu": "urd", "English": "eng"}
 
 
-@st.cache(allow_output_mutation=True)
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
 
 
-@st.cache(allow_output_mutation=True)
 def get_img_with_href(local_img_path, target_url):
     img_format = os.path.splitext(local_img_path)[-1].replace('.', '')
     bin_str = get_base64_of_bin_file(local_img_path)
